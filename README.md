@@ -2,7 +2,7 @@
 This is an attempt to create the most basic example of a web map for crowdsourcing... anything that users can draw on a map (points, squares, circles, lines, polygons...).
 It uses [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw) ([demo](https://leaflet.github.io/Leaflet.draw/)), an extension of the [Leaflet](http://leafletjs.com/reference.html) javascript mapping library to enable users to draw shapes on a map and then inserts them in a [CartoDB table](https://cartodb.com/data/). The webmap is hosted on [gh-pages](https://pages.github.com/), which allows you to host free static websites on github, the codesharing website that you're reading this on currently.
 
-[![Example Screenshot](screenshot.png)](http://radumas.github.io/crowdmap-basic)
+[![Example Screenshot](screenshot.png)](http://radumas.github.io/crowdmap-basic)  
 [Try it here](http://radumas.github.io/crowdmap-basic)
 
 # Table of Contents
@@ -16,11 +16,12 @@ It uses [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw) ([demo](https://
 
 1. Get a [github](https://github.com/join) and a [cartodb](https://cartodb.com/signup) account.
   + (*Optional*) Mac & Windows users can install the [Github Desktop Software](https://desktop.github.com/)
-2. Fork the repository by clicking on the [fork icon](#fork-destination-box) at the top right of this page, like the image below. To learn more about forking, click [here](https://help.github.com/articles/fork-a-repo/).
-[![](https://help.github.com/assets/images/help/repository/fork_button.jpg)](#fork-destination-box)
+2. Fork the repository by clicking on the [fork icon](#js-flash-container) at the top right of this page, like the image below. To learn more about forking, click [here](https://help.github.com/articles/fork-a-repo/).
+[![](https://help.github.com/assets/images/help/repository/fork_button.jpg)](#js-flash-container)  
+
 ## After Forking this Repository
 
-1. Perform all the steps under the [CartoDB](#cartodb) heading, then.
+1. Perform all the steps under the [CartoDB](#cartodb) heading, then.  
 2. Modify the following variables in `index.html` (search for "TODO"), you can edit this after [cloning](https://help.github.com/articles/cloning-a-repository/), or you can edit directly in your web-browser by clicking on the [`index.html`](index.html) filename above and then clicking on the pencil icon in the top right.
    `cartoDBusername` to your cartodb username
    `cartoDBinsertfunction` to the name of your insert function
@@ -75,14 +76,14 @@ This section details the modifications made from the [excellent tutorial](http:/
 
     //Construct the SQL query to insert data from the three parameters: the drawing, 
     //the input username, and the input description of the drawn shape
-      var sql = "SELECT insert_crowd_mapping_data(";
+    var sql = "SELECT insert_crowd_mapping_data(";
     sql += drawing;
-      sql += ","+enteredDescription;
-      sql += ","+enteredUsername;
-      sql += ");";
-   ```  
+    sql += ","+enteredDescription;
+    sql += ","+enteredUsername;
+    sql += ");";
+```  
 3. And then add the sql query to an AJAX call in order to pass the data to your CartoDB table
-    ```javascript
+```javascript
     //TODO: Change to your username
     var cartoDBusername = "raphaeld"  
     //Sending the data
@@ -101,7 +102,7 @@ This section details the modifications made from the [excellent tutorial](http:/
             console.log("Problem saving the data");
         }
       });
-      ```
+```
 4. After each new drawing is inserted, the data from the `drawnItems` layer is passed to the `CartoDBData` layer without re-querying the database. This does mean that a user **won't** see others' edits to the map after load. See Mike Foster's [tutorial](http://duspviz.mit.edu/web-map-workshop/cartodb-data-collection/#) for the easy fix to reload the data from CartoDB after every draw.
     ```javascript
     // Transfer drawing to the CartoDB layer
