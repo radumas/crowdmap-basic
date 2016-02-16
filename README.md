@@ -38,10 +38,10 @@ It uses [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw) ([demo](https://
 ![Custom SQL tab](https://i.stack.imgur.com/HPEHG.png)
 4. Copy and paste the contents of `insert_function.sql` ([located here](insert_function.sql)) into the sql pane, and then modify the name of the table to be inserted:  
 ```sql
-	--The name of your table in cartoDB
-	_the_table TEXT := 'crowdmap_basic';
-```
-This function allows you to send data from the map to the CartoDB using a publicly accessible URL while limiting what functions the public can perform on the data (for example, modifying or deleting existing data). This function takes the drawn shape as a GeoJSON, the description, and the username. It converts the GeoJSON to a PostGIS geometry object and then inserts a new row in the table with the geometry, and the other two user-input values. Since it isn't easy to view saved functions in cartoDB, I recommend saving the function in a text file.
+--The name of your table in cartoDB  
+_the_table TEXT := 'crowdmap_basic';
+```  
+This function allows you to send data from the map to the CartoDB using a publicly accessible URL while limiting what functions the public can perform on the data (for example, modifying or deleting existing data). This function takes the drawn shape as a GeoJSON, the description, and the username. It converts the GeoJSON to a PostGIS geometry object and then inserts a new row in the table with the geometry, and the other two user-input values. Since it isn't easy to view saved functions in cartoDB, I recommend saving the function in a text file.  
 **If you have different tables** you need to create a unique function for each, it's probably a good idea to save each function as a separate file so you can recall what is on your CartoDB account. Alternatively you can see which functions have been created with the following `sql` query [source](http://stackoverflow.com/a/1559039/4047679):  
 ```sql  
 SELECT  proname, proargnames, prosrc 
@@ -50,7 +50,8 @@ JOIN    pg_catalog.pg_proc p
 ON      p.pronamespace = n.oid
 WHERE   n.nspname = 'public' 
 and p.proowner <> 10
-```	
+```	 
+    
 # Now What?
 What to do and modify on your map once it's working. Have a look at the `config` variable to get a sense of what you can modify:
  - **Where the map is focused** on with the `mapcenter` parameter
@@ -81,9 +82,9 @@ This section details the modifications made from the [excellent tutorial](http:/
     sql += ","+enteredDescription;
     sql += ","+enteredUsername;
     sql += ");";
-```  
+    ```  
 3. And then add the sql query to an AJAX call in order to pass the data to your CartoDB table
-```javascript
+    ```javascript
     //TODO: Change to your username
     var cartoDBusername = "raphaeld"  
     //Sending the data
@@ -102,7 +103,7 @@ This section details the modifications made from the [excellent tutorial](http:/
             console.log("Problem saving the data");
         }
       });
-```
+    ```
 4. After each new drawing is inserted, the data from the `drawnItems` layer is passed to the `CartoDBData` layer without re-querying the database. This does mean that a user **won't** see others' edits to the map after load. See Mike Foster's [tutorial](http://duspviz.mit.edu/web-map-workshop/cartodb-data-collection/#) for the easy fix to reload the data from CartoDB after every draw.
     ```javascript
     // Transfer drawing to the CartoDB layer
