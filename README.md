@@ -29,7 +29,7 @@ It uses [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw) ([demo](https://
    Each row represents one submission from the map with the first field a unique id assigned by CartoDB to each geometry. `the_geom` is the geographic object. `description` is the user input description of the shape, and `name` is the user's name.
 3. In the view for the table, click on the "SQL" tab on the write to execute arbitrary SQL.  
 ![Custom SQL tab](https://i.stack.imgur.com/HPEHG.png)
-4. Copy and paste the contents of `insert_function.sql` ([located here](https://github.com/radumas/crowdmap-basic/blob/gh-pages/insert_function.sql)) into the sql pane, and then modify the name of the table to be inserted (line 17 begins with:  
+4. Copy and paste the contents of `insert_function.sql` ([located here](insert_function.sql)) into the sql pane, and then modify the name of the table to be inserted (line 17 begins with:  
 `    EXECUTE ' INSERT INTO crowdmap_basic`)
 This function allows you to send data from the map to the CartoDB using a publicly accessible URL while limiting what functions the public can perform on the data (for example, modifying or deleting existing data). This function takes the drawn shape as a GeoJSON, the description, and the username. It converts the GeoJSON to a PostGIS geometry object and then inserts a new row in the table with the geometry, and the other two user-input values. Since it isn't easy to view saved functions in cartoDB, I recommend saving the function in a text file.
 **If you have different tables** you need to create a unique function for each, it's probably a good idea to save each function as a separate file so you can recall what is on your CartoDB account.
@@ -89,4 +89,14 @@ This section details the modifications made from the [excellent tutorial](http:/
     ```
 	
 # Now What?
-What to do and modify from your map.
+What to do and modify on your map once it's working. Have a look at the `config` variable to get a sense of what you can modify:
+ - **Where the map is focused** on with the `mapcenter` parameter
+ - **The shapes that can be drawn** (line, marker, etc...) under the `drawOptions` parameters. See more Leaflet.Draw options [here](https://github.com/Leaflet/Leaflet.draw#options)  
+     + You can also enable editing and deleting of shapes, however this will require additional configuration of the function that communicates with the CartoDB database, see [this CartoDB tutorial](http://blog.cartodb.com/read-and-write-to-cartodb-with-the-leaflet-draw-plugin/) for more details. (**Note**: that CartoDB example may be vulnerable to SQL Injection, see [here](https://dba.stackexchange.com/questions/49699/sql-injection-in-postgres-functions-vs-prepared-queries))
+ - **The base map** (background) by modifying `var CartoDB_Positron = L.tileLayer(...)`, you can test a number [here](https://leaflet-extras.github.io/leaflet-providers/preview/)
+ - **The map style** (e.g. height, width, font) by modifying [`css/style.css`](css/style.css). See [this](http://flexboxfroggy.com/) quirky frog-based tutorial as an introduction to [Cascading Style Sheets](http://stackoverflow.com/a/9289668/4047679)
+ - **[Advanced] what fields are collected.** This requires the modification of:
+   + The table in CartoDB
+   + The [`insert_function`](insert_function.sql)
+   + The field(s) used after `<div id="dialog" title="Tell us About this Drawing">` in `index.html`
+   + The `setData()` function in `index.html`
