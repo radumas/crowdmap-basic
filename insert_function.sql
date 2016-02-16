@@ -10,11 +10,15 @@ RETURNS integer
 AS $$
 DECLARE 
     _the_geom GEOMETRY;
+	--The name of your table in cartoDB
+	_the_table TEXT := 'crowdmap_basic';
 BEGIN
     --Convert the GeoJSON to a geometry type for insertion. 
     _the_geom := ST_SetSRID(ST_GeomFromGeoJSON(_geojson),4326); 
+	
 
-    EXECUTE ' INSERT INTO crowdmap_basic (the_geom, description, name)
+	--Executes the insert given the supplied geometry, description, and username, while protecting against SQL injection.
+    EXECUTE ' INSERT INTO '||quote_ident(_the_table)||' (the_geom, description, name)
             VALUES ($1, $2, $3)
             ' USING _the_geom, _description, _name;
             
