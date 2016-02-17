@@ -1,6 +1,9 @@
 # Crowdmap: Basic
 This is an attempt to create the most basic example of a web map for crowdsourcing... anything that users can draw on a map (points, squares, circles, lines, polygons...).
-It uses [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw) ([demo](https://leaflet.github.io/Leaflet.draw/)), an extension of the [Leaflet](http://leafletjs.com/reference.html) javascript mapping library to enable users to draw shapes on a map and then inserts them in a [CartoDB table](https://cartodb.com/data/). The webmap is hosted on [gh-pages](https://pages.github.com/), which allows you to host free static websites on github, the codesharing website that you're reading this on currently.
+It uses [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw) ([demo](https://leaflet.github.io/Leaflet.draw/)), an extension of the [Leaflet](http://leafletjs.com/reference.html) javascript mapping library to enable users to draw shapes on a map and then inserts them in a [CartoDB table](https://cartodb.com/data/). The webmap is hosted on [gh-pages](https://pages.github.com/), which allows you to host free static websites on github, the codesharing website that you're reading this on currently. The only permitted behaviour is for users to view previously submitted input and to submit their own input. Editing or deleting input is not permitted. Examples of possible implementations include:
+ - [Mapping neighbourhood boundaries](http://bostonography.com/hoods) ([code](https://github.com/mjfoster83/neighborhoods)) 
+ - [Collecting data on traffic safety issues](http://app01.cityofboston.gov/VZSafety/#_=_)
+ - [Soliciting input on routes and points for better biking infrastructure](http://boston-cyclists-union.github.io/bikeways4everybody) (based on this workshop, [code here](https://github.com/radumas/bikeways4everybody))
 
 [![Example Screenshot](screenshot.png)](http://radumas.github.io/crowdmap-basic)  
 [Try it here](http://radumas.github.io/crowdmap-basic)
