@@ -122,7 +122,7 @@
 			drawnItems.addLayer(layer);
 			dialog.dialog("open");
 		});
-
+		
 		var dialog = $("#dialog").dialog({
 			autoOpen: false,
 			height: 300,
@@ -137,11 +137,12 @@
 				"Add to Database": setData,
 				Cancel: function () {
 					dialog.dialog("close");
-					map.removeLayer(drawnItems);
+					refreshLayer();				
 				}
 			},
 			close: function () {
 				form[0].reset();
+				refreshLayer();
 				console.log("Dialog closed");
 			}
 		});
@@ -203,7 +204,7 @@
 			map.removeLayer(drawnItems);
 			drawnItems = new L.FeatureGroup();
 		/* 
-			This would refresh the data-layer to include new data from the table after each drawing is submitted. 
+			This would refresh the data-layer to include new data from the CartoDB table after each drawing is submitted. 
 		*/
 		//      if (map.hasLayer(cartoDBData)) {
 		//        map.removeLayer(cartoDBData);
