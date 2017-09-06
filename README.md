@@ -28,16 +28,20 @@ It uses [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw) ([demo](https://
 
 ### Set up a Carto Database
 
-1. Create a new Carto dataset. The default dataset comes with the following fields: `{cartodb_id, the_geom, description, name}`
-   Each row represents one submission from the map with the first field a unique id assigned by Carto to each geometry. `the_geom` is the geographic object. `description` is the user input description of the shape, and `name` is the user's name.
-3. In the view for the table, click on the "SQL" tab on the write to execute arbitrary SQL.  
-![Custom SQL tab](https://i.stack.imgur.com/HPEHG.png)
-4. Copy and paste the contents of `insert_function.sql` ([located here](insert_function.sql)) into the sql pane, and then modify the name of the table to be inserted:  
+1. Create a new Carto dataset. Find datasets by navigating to the top left, click on `Maps` and then `Your Datasets`. On that page click the `NEW DATASET` button on the right and then click `CREATE EMPTY DATASET` on the right.
+![](carto_datasets.png)
+
+2. The default dataset comes with the following fields: `{cartodb_id, the_geom, description, name}`
+   Each row represents one submission from the map with the first field a unique id assigned by Carto to each geometry. `the_geom` is the geographic object. `description` is the user input description of the shape, and `name` is the user's name. **Click** on `untitled_table` to give your table a unique name. Remember this name, though the rest of this tutorial uses `crowdmap_basic` as the tablename.
+![](carto_table_setup.png)
+3. In the bottom left corner, slide the circle from `METADATA` to `SQL` to enable writing arbitrary SQL. SQL stands for Structured Query Language and it's a standardized programming language for databases that comes in a number of flavours for different database engines (Oracle, Microsoft SQL Server). Carto uses PostgreSQL under the hood.
+
+4. Copy and paste the contents of `insert_function.sql` ([located here](insert_function.sql)) into the SQL pane (it has `SELECT * FROM untitled_table` in the image :point_up:), and then modify the name of the table to be inserted (if you changed the table name) in step 2 of this section:  
 	```
 	_the_table TEXT := 'crowdmap_basic';
 	```  
-	This function allows you to send data from the map to the Carto using a publicly accessible URL while limiting what functions the public can perform on the data (for example, modifying or deleting existing data). This function takes the drawn shape as a GeoJSON, the description, and the username. It converts the GeoJSON to a PostGIS geometry object and then inserts a new row in the table with the geometry, and the other two user-input values. Since it isn't easy to view saved functions in Carto, I recommend saving the function in a text file.  
-	**If you have multiple tables** see below for more information on keeping track of multiple files. 
+	This function allows you to send data from the map to the Carto using a publicly accessible URL while limiting what functions the public can perform on the data (for example, the public can't modify or delete existing data). This function takes the drawn shape as a GeoJSON, the description, and the username. It converts the GeoJSON to a PostGIS geometry object and then inserts a new row in the table with the geometry, and the other two user-input values. Since it isn't easy to view saved functions in Carto, I recommend saving the function in a text file.  
+	**If you have multiple tables** (because you're creating multiple maps, or you're teaching this workshop multiple times) see below for more information on keeping track of multiple files. Else go down to [**Edit HTML**](#edit-html)
 
 **Multiple tables:** you need to create a unique function for each, it's probably a good idea to save each function as a separate file so you can recall what is on your Carto account. Alternatively you can see which functions have been created with the following `sql` query ([source](http://stackoverflow.com/a/1559039/4047679)):  
 ```sql  
@@ -49,12 +53,19 @@ WHERE   n.nspname = 'public'
 AND		p.proowner <> 10
 ```	 
 ### Edit HTML
-1. Modify the following variables in `index.html` (search for "TODO"), you can edit this after [cloning](https://help.github.com/articles/cloning-a-repository/), or you can edit directly in your web-browser by clicking on the [`index.html`](index.html) filename above :point_up: and then clicking on the :pencil: icon in the top right.  
+You can download the contents of this repository as a folder (called [cloning](https://help.github.com/articles/cloning-a-repository/)) so you can modify and test it on your personal machine rather than displaying it on the web. If you're interested in that I'd recommend starting by downloading [GitHub Desktop](https://desktop.github.com/).
+
+However, the goal of this tutorial is to entirely use web tools, so we'll modify things in your browser. `index.html` is the lobby for the webpage for this project. This is a combination of html, CSS, and JavaScript code that tells your browser how to render the map prettily and where to send your data.  
+
+1. You can edit this file directly in your web-browser by clicking on the [`index.html`](index.html) filename above :point_up: and then clicking on the :pencil: icon in the top right. Modify the following variables in `index.html` (search for "TODO"):   
    - `cartoDBusername` to your Carto username
-   - `cartoDBinsertfunction` to the name of your insert function
-   - `cartoDBtablename` to the name of your table in Carto
-3. Go to http://YOURGITHUBUSERNAME.github.io/crowdmap-basic to see your own map, and start submitting data, you can see the submitted data by going to the data view for that table in your Carto account.
-4. Modify the code to your whims ([now what?](#now-what)). 
+   - `cartoDBinsertfunction` to the name of your insert function (if you changed it)
+   - `cartoDBtablename` to the name of your table in Carto (if you changed it)
+2. Commit your changes! A "Commit" is equivalent to saving a document in Version Control, but instead it saves the difference to the document, so you can see it's entire history on GitHub as well as useful notes for yourself or collaborators on what you actions you took in your commit. You commit by navigating to the bottom of the page :point_down: where you were editing where you'll see the below box. You can leave the empty defaults but it's good practice to write meaningful messages.
+![](commit.png)
+3. After your modifications are committed, GitHub will build and publish your project on the web. Go to http://YOURGITHUBUSERNAME.github.io/crowdmap-basic to see your own map, and start submitting data, you can see the submitted data by going to the data view for that table in your Carto account.
+4. :tada: Give yourself a pat on the back! This may be the end of the workshop, but this is just the beginning.
+5. Modify the code to your whims ([now what?](#now-what)). 
 
 # Now What?
 What to do and modify on your map once it's working. Have a look at the different parameters in the `config` variable in [`index.html`](index.html) to get a sense of what you can modify:
