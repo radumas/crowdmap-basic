@@ -2,7 +2,7 @@
 <!--Based on https://github.com/mjfoster83/web-map-workshop/blob/master/7_advancedMapping_CartoDB/index-completed.html-->
 <html>
   <head>
-    <title>Leaflet to CartoDB - Point Collection Tool Beta</title>
+    <title>Leaflet to Carto - Point Collection Tool Beta</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@0.7.7/dist/leaflet.css"
   integrity="sha384-99ZJFcuBCh9c/V/+8YwDX/TUGG8JWMG+gKFJWzk0BZP3IoDMN+pLGd3/H0yjg4oa"
   crossorigin=""/>
@@ -47,11 +47,11 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script>
 
-		//TODO: Change to your username, insert function on cartodb, and cartodb tablename
+		//TODO: Change to your username, insert function on Carto, and Carto tablename
 		var config = {
-			cartoDBusername : "raphaeld",
-			cartoDBinsertfunction : "insert_crowd_mapping_data",
-			cartoDBtablename : "crowdmap_basic",
+			cartoUsername : "raphaeld",
+			cartoInsertFunction : "insert_crowd_mapping_data",
+			cartoTablename : "crowdmap_basic",
 			mapcenter: [42.381899, -71.122499],
 			drawOptions: {
 				draw : {
@@ -70,13 +70,13 @@
 		};
 
 
-		// Add Data from CartoDB using the SQL API
+		// Add Data from Carto using the SQL API
 		// Declare Variables
-		// Create Global Variable to hold CartoDB points
-		var cartoDBData = null;
+		// Create Global Variable to hold Carto points
+		var cartoData = null;
 
-		// Write SQL Selection Query to be Used on CartoDB Table
-		var sqlQuery = "SELECT the_geom, description, name FROM " + config.cartoDBtablename;
+		// Write SQL Selection Query to be Used on Carto Table
+		var sqlQuery = "SELECT the_geom, description, name FROM " + config.cartoTablename;
 
 
 		// Create Leaflet map object
@@ -92,11 +92,11 @@
 		CartoDB_Positron.addTo(map);
 
 		//Fetches
-		var getData = "https://" + config.cartoDBusername + ".cartodb.com/api/v2/sql?format=GeoJSON&q=" + sqlQuery;
+		var getData = "https://" + config.cartoUsername + ".carto.com/api/v2/sql?format=GeoJSON&q=" + sqlQuery;
 
 		function getGeoJSON() {
 			$.getJSON(getData, function (data) {
-				cartoDBData = L.geoJson(data, {
+				cartoData = L.geoJson(data, {
 					onEachFeature: function (feature, layer) {
 						layer.bindPopup('' + feature.properties.description + '<br>Submitted by ' + feature.properties.name + '');
 					}
@@ -164,11 +164,11 @@
 			var enteredUsername = "'" + username.value + "'",
 				enteredDescription = "'" + description.value + "'";
 			drawnItems.eachLayer(function (layer) {
-			//Convert the drawing to a GeoJSON to pass to the CartoDB sql database
+			//Convert the drawing to a GeoJSON to pass to the Carto sql database
 				var drawing = "'" + JSON.stringify(layer.toGeoJSON().geometry) + "'",
 
 				  //Construct the SQL query to insert data from the three parameters: the drawing, the input username, and the input description of the drawn shape
-					sql = "SELECT " + config.cartoDBinsertfunction + "(";
+					sql = "SELECT " + config.cartoInsertFunction + "(";
 				sql += drawing;
 				sql += "," + enteredDescription;
 				sql += "," + enteredUsername;
@@ -179,7 +179,7 @@
 				//Sending the data
 				$.ajax({
 					type: 'POST',
-					url: 'https://' + config.cartoDBusername + '.cartodb.com/api/v2/sql',
+					url: 'https://' + config.cartoUsername + '.carto.com/api/v2/sql',
 					crossDomain: true,
 					data: {"q": sql},
 					dataType: 'json',
@@ -193,14 +193,14 @@
 				});
 
 				/* 
-				* Transfer submitted drawing to the CartoDB layer, this results in the user's data appearing on the map without
+				* Transfer submitted drawing to the Carto layer, this results in the user's data appearing on the map without
 				* requerying the database (see the refreshLayer() function for an alternate way of doing this) 
 				*/
 				var newData = layer.toGeoJSON();
 				  newData.properties.description = description.value;
 				  newData.properties.name = username.value;
 
-				cartoDBData.addData(newData);
+				cartoData.addData(newData);
 
 			});
 			
@@ -211,10 +211,10 @@
 			map.removeLayer(drawnItems);
 			drawnItems = new L.FeatureGroup();
 		/* 
-			This would refresh the data-layer to include new data from the CartoDB table after each drawing is submitted. 
+			This would refresh the data-layer to include new data from the Carto table after each drawing is submitted. 
 		*/
-		//      if (map.hasLayer(cartoDBData)) {
-		//        map.removeLayer(cartoDBData);
+		//      if (map.hasLayer(cartoData)) {
+		//        map.removeLayer(cartoData);
 		//      };
 		//      getGeoJSON();
 		}
