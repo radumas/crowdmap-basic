@@ -121,7 +121,7 @@ This section details the modifications made from the [excellent tutorial](http:/
         }
       });
     ```
-4. After each new drawing is inserted, the data from the `drawnItems` layer is passed to the `CartoDBData` layer without re-querying the database. This does mean that a user **won't** see others' edits to the map after load. See Mike Foster's [tutorial](http://duspviz.mit.edu/web-map-workshop/cartodb-data-collection/#) for the easy fix to reload the data from Carto after every draw.
+4. After each new drawing is inserted, the data from the `drawnItems` layer is passed to the `cartoData` layer without re-querying the database. This does mean that a user **won't** see others' edits to the map after load. See Mike Foster's [tutorial](http://duspviz.mit.edu/web-map-workshop/cartodb-data-collection/#) for the easy fix to reload the data from Carto after every draw.
     ```javascript
     // Transfer drawing to the Carto layer
     var newData = layer.toGeoJSON();
