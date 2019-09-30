@@ -162,8 +162,11 @@
 		});
 
 		function setData() {
-			var enteredUsername = "'" + username.value + "'",
-				enteredDescription = "'" + description.value + "'";
+			//.replace() doubles each single quote in order to escape them for PostgreSQL 
+			//so that user input containing single quotes doesn't escape the SQL function
+			//There might be a better way https://stackoverflow.com/questions/57844173/how-can-i-sanitize-user-input-data-to-be-inserted-into-my-carto-table
+			var enteredUsername = "'" + username.value.replace("'", "''") + "'",
+				enteredDescription = "'" + description.value.replace("'", "''") + "'";
 			drawnItems.eachLayer(function (layer) {
 			//Convert the drawing to a GeoJSON to pass to the Carto sql database
 				var drawing = "'" + JSON.stringify(layer.toGeoJSON().geometry) + "'",
